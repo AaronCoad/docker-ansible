@@ -1,5 +1,5 @@
 services:
   ansible:
-    image: ubuntu:jammy
+    container_name: ansible
     build:
       dockerfile: ansible-dockerfile

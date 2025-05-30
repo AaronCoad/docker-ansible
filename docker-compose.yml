@@ -1,5 +1,8 @@
 services:
   ansible:
     container_name: ansible
+    ports: 
+      - "22:22"
     build:
       dockerfile: ansible-dockerfile
+    command: /usr/sbin/sshd -D

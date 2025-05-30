@@ -1,25 +1,10 @@
 FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-  apt update && \
-  apt install -y wget apt-transport-https && \
-  echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list && \
-  mkdir -p /etc/apt/keyrings && \
-  wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc && \
-  apt-get install -y gcc python2-dev libkrb5-dev && \
-  apt-get install python3-pip -y && \
-  pip3 install --upgrade pip && \
-  pip3 install --upgrade virtualenv && \
-  pip3 install pywinrm[kerberos] && \
-  apt install krb5-user -y && \ 
-  pip3 install pywinrm && \
-  pip3 install ansible && \
-  apt-get install -y openssh-server openssh-client
 USER root
-COPY ./keygen.sh ./keygen.sh
-RUN bash ./keygen.sh
-RUN mkdir -p /run/sshd && chmod 755 /run/sshd
-RUN service ssh start
+COPY ./scripts ./scripts
+RUN bash ./scripts/install-python.sh
+RUN bash ./scripts/install-ansible.sh
+RUN bash ./scripts/install-ssh.sh
+RUN bash ./scripts/register-temurin.sh
+RUN bash ./scripts/keygen.sh
 COPY ./ansible-playbooks ./ansible-playbooks
-
-# CMD ["sleep", "infinity"]

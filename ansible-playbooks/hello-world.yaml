@@ -7,3 +7,9 @@
    - name: Print message
      ansible.builtin.debug:
       msg: Hello world
+   
+   - name: Install Java
+     apt:
+      name: temurin-11-jdk
+      update-cache: yes
+      state: present

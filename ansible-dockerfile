@@ -1,18 +1,10 @@
 FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-  apt-get install -y gcc python2-dev libkrb5-dev && \
-  apt-get install python3-pip -y && \
-  pip3 install --upgrade pip && \
-  pip3 install --upgrade virtualenv && \
-  pip3 install pywinrm[kerberos] && \
-  apt install krb5-user -y && \ 
-  pip3 install pywinrm && \
-  pip3 install ansible && \
-  apt-get install -y openssh-server openssh-client
 USER root
-COPY ./keygen.sh ./keygen.sh
-RUN bash ./keygen.sh
+COPY ./scripts ./scripts
+RUN bash ./scripts/install-python.sh
+RUN bash ./scripts/install-ansible.sh
+RUN bash ./scripts/install-ssh.sh
+RUN bash ./scripts/register-temurin.sh
+RUN bash ./scripts/keygen.sh
 COPY ./ansible-playbooks ./ansible-playbooks
-
-CMD ["sleep", "infinity"]

@@ -1,10 +1,8 @@
 FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 USER root
-COPY ./scripts ./scripts
+COPY ./scripts/host ./scripts
 RUN bash ./scripts/install-python.sh
+RUN bash ./scripts/install-ssh-client.sh
 RUN bash ./scripts/install-ansible.sh
-RUN bash ./scripts/install-ssh.sh
-RUN bash ./scripts/register-temurin.sh
-RUN bash ./scripts/keygen.sh
 COPY ./ansible-playbooks ./ansible-playbooks

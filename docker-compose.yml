@@ -1,8 +1,29 @@
 services:
-  ansible:
-    container_name: ansible
-    ports: 
+  ansible-client:
+    container_name: ansible-client
+    ports:
       - "22:22"
+      - "80:80"
+      - "443:443"
     build:
-      dockerfile: ansible-dockerfile
-    command: /usr/sbin/sshd -D
+      dockerfile: ansible-client-dockerfile
+    networks:
+      - ansible-bridge
+    volumes:
+      - sshkey:/authorized_keys
+    tty: true
+  ansible-host:
+    container_name: ansible-host
+    build:
+      dockerfile: ansible-host-dockerfile
+    networks:
+      - ansible-bridge
+    command: bash -c "./scripts/keygen.sh"
+    tty: true
+    volumes:
+      - sshkey:/root/.ssh
+networks:
+  ansible-bridge:
+    driver: bridge
+volumes:
+  sshkey:

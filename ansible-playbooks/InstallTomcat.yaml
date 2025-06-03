@@ -1,0 +1,7 @@
+- name: Install Tomcat
+  hosts: myhosts
+  become: no
+  become_user: root
+  roles:
+    - java
+    - tomcat

@@ -1,0 +1,2 @@
+tomcat_version: "10.1.41"
+tomcat_install_dir: "/opt/tomcat"

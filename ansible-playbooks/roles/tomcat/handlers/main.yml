@@ -1,0 +1,9 @@
+- name: Stop Tomcat
+  ansible.builtin.command:
+    cmd: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh stop"
+  listen: Restart Tomcat
+
+- name: Start Tomcat
+  ansible.builtin.command:
+    cmd: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh start"
+  listen: Restart Tomcat

@@ -1,0 +1,41 @@
+- name: Setup dependencies
+  ansible.builtin.apt:
+    name: apt-transport-https
+    state: present
+    update_cache: true
+
+- name: Setup keyrings folder
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Setup Eclipse Adoptium GPG key
+  ansible.builtin.get_url:
+    url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+    dest: /etc/apt/keyrings/adoptium.asc
+    checksum: "sha1:650a5347a9b74bec34ec0adc5e4ec2456d74172d"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Setup Eclipse Adoptium apt repository
+  shell: |
+    echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+
+- name: Setup Temurin
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Setup Temurin
+  ansible.builtin.apt:
+    name: "temurin-{{ jdk_version }}-jdk"
+    state: present
+
+- name: Set this jdk as the default alternative
+  community.general.alternatives:
+    name: "java"
+    path: "/usr/lib/jvm/temurin-{{ jdk_version }}-jdk-amd64/bin/java"
+  when: set_default

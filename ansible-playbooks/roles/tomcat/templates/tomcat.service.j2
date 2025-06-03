@@ -1,0 +1,12 @@
+[Unit]
+Description=Apache Tomcat Server
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart={{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh run
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

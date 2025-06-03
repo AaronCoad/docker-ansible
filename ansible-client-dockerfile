@@ -4,7 +4,7 @@ USER root
 COPY ./scripts/target ./scripts
 RUN bash ./scripts/install-ssh-server.sh
 RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh
-COPY init.sh /usr/local/bin/init.sh
+COPY ./scripts/target/init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
 CMD ["/usr/local/bin/init.sh"]

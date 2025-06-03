@@ -3,7 +3,7 @@ services:
     container_name: ansible-client
     ports:
       - "22:22"
-      - "80:80"
+      - "8080:8080"
       - "443:443"
     build:
       dockerfile: ansible-client-dockerfile

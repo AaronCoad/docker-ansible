@@ -1,0 +1,31 @@
+- name: Ensure dependencies are installed
+  ansible.builtin.package:
+    name: unzip
+    state: present
+
+- name: Download Apache Tomcat
+  ansible.builtin.get_url:
+    url: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "/tmp/apache-tomcat.tar.gz"
+
+- name: Make Tomcat directory
+  ansible.builtin.file:
+    path: "{{ tomcat_install_dir }}"
+    state: "directory"
+    mode: 0755
+
+- name: Extract Tomcat
+  ansible.builtin.unarchive:
+    src: "/tmp/apache-tomcat.tar.gz"
+    dest: "{{ tomcat_install_dir }}"
+    remote_src: yes
+
+- name: Enable and start Tomcat service
+  ansible.builtin.command:
+    cmd: "/opt/tomcat/apache-tomcat-10.1.41/bin/catalina.sh start &"
+    
+- name: Check if Tomcat is still running
+  ansible.builtin.wait_for:
+    port: 8080
+    delay: 5
+    timeout: 30
